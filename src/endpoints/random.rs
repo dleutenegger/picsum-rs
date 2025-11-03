@@ -18,6 +18,23 @@ pub struct RandomImageParameters {
 }
 
 impl PicsumClient {
+    /// Retrieve a random image with the given settings
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use picsum_rs::endpoints::random::RandomImageParameters;
+    /// use picsum_rs::PicsumClient;
+    ///
+    /// // Retrieve a random 400x400px image.
+    /// PicsumClient::default()
+    ///     .get_random_image(
+    ///         RandomImageParameters::builder()
+    ///             .width(400)
+    ///             .height(400)
+    ///             .build()
+    ///     );
+    /// ```
     pub async fn get_random_image(
         &self,
         parameters: RandomImageParameters,
