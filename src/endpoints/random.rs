@@ -72,7 +72,7 @@ impl PicsumClient {
                 Err(err) => match err.status() {
                     Some(StatusCode::BAD_REQUEST) => Err(InvalidRequest(err.to_string())),
                     Some(StatusCode::INTERNAL_SERVER_ERROR) => Err(ServerError(err.to_string())),
-                    Some(code) => Err(UnexpectedError(format!("{} {}", code, err.to_string()))),
+                    Some(code) => Err(UnexpectedError(format!("{} {}", code, err))),
                     None => Err(UnexpectedError(err.to_string())),
                 },
             },

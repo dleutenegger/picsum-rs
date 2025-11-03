@@ -28,6 +28,8 @@ pub enum RequestError {
     UnexpectedError(String),
 }
 
+
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Image {
     id: String,
