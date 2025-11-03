@@ -84,11 +84,10 @@ impl PicsumClient {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::PicsumClientBuilder;
 
     #[tokio::test]
     async fn test_retrieve() {
-        let client = PicsumClientBuilder::default().build();
+        let client = PicsumClient::default();
 
         let response = client
             .get_random_image(

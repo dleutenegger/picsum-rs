@@ -4,17 +4,21 @@ use std::sync::Arc;
 
 static BASE_URL: &str = "https://picsum.photos";
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct PicsumClient {
     inner: Arc<PicsumClientInner>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 struct PicsumClientInner {
     client: reqwest::Client,
 }
 
-impl PicsumClient {}
+impl PicsumClient {
+    pub fn builder() -> PicsumClientBuilder {
+        PicsumClientBuilder::new()
+    }
+}
 
 #[derive(Default)]
 pub struct PicsumClientBuilder {
