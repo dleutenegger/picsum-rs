@@ -1,0 +1,17 @@
+[package]
+name = "picsum-rs"
+version = "0.1.0"
+edition = "2024"
+authors = ["dleutenegger"]
+keywords = ["api", "picsum"]
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
+reqwest = "0.12.24"
+thiserror = "2.0.17"
+typed-builder = "0.23.0"
+
+[dev-dependencies]
+tokio = { version = "1.48.0", features = ["rt", "macros"] }
+
