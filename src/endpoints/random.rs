@@ -7,13 +7,30 @@ use typed_builder::TypedBuilder;
 
 #[derive(TypedBuilder)]
 pub struct RandomImageParameters {
+    #[builder(setter(doc = "Set `width`."))]
     width: u16,
+    #[builder(setter(doc = "Set `height`."))]
     height: u16,
-    #[builder(default = false)]
+    #[builder(
+        default = false,
+        setter(
+            doc = "Set `grayscale`. Defines if the image should be grayscale. Defaults to false."
+        )
+    )]
     grayscale: bool,
-    #[builder(default = 0)]
+    #[builder(
+        default = 0,
+        setter(
+            doc = "Set `blur`. Defines the amount of blur between 0-10. Defaults to no blur (0)."
+        )
+    )]
     blur: u8,
-    #[builder(default=FileType::Jpeg)]
+    #[builder(
+        default = FileType::Jpeg,
+        setter(
+            doc = "Set `file_type`. Defines the file type of the requested image. Defaults to no jpeg."
+        )
+    )]
     file_type: FileType,
 }
 
