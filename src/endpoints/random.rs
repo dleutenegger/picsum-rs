@@ -1,38 +1,7 @@
 use crate::endpoints::RequestError::{InvalidRequest, ServerError, UnexpectedError};
-use crate::endpoints::{FileType, Image, RequestError};
+use crate::endpoints::{Image, ImageSettings, RequestError};
 use crate::{BASE_URL, PicsumClient};
 use reqwest::StatusCode;
-use std::cmp::min;
-use typed_builder::TypedBuilder;
-
-#[derive(TypedBuilder)]
-pub struct RandomImageParameters {
-    #[builder(setter(doc = "Set `width`."))]
-    width: u16,
-    #[builder(setter(doc = "Set `height`."))]
-    height: u16,
-    #[builder(
-        default = false,
-        setter(
-            doc = "Set `grayscale`. Defines if the image should be grayscale. Defaults to false."
-        )
-    )]
-    grayscale: bool,
-    #[builder(
-        default = 0,
-        setter(
-            doc = "Set `blur`. Defines the amount of blur between 0-10. Defaults to no blur (0)."
-        )
-    )]
-    blur: u8,
-    #[builder(
-        default = FileType::Jpeg,
-        setter(
-            doc = "Set `file_type`. Defines the file type of the requested image. Defaults to no jpeg."
-        )
-    )]
-    file_type: FileType,
-}
 
 impl PicsumClient {
     /// Retrieve a random image with the given settings
@@ -40,13 +9,13 @@ impl PicsumClient {
     /// # Examples
     ///
     /// ```
-    /// use picsum_rs::endpoints::random::RandomImageParameters;
+    /// use picsum_rs::endpoints::ImageSettings;
     /// use picsum_rs::PicsumClient;
     ///
     /// // Retrieve a random 400x400px image.
     /// PicsumClient::default()
     ///     .get_random_image(
-    ///         RandomImageParameters::builder()
+    ///         ImageSettings::builder()
     ///             .width(400)
     ///             .height(400)
     ///             .build()
@@ -54,11 +23,11 @@ impl PicsumClient {
     /// ```
     pub async fn get_random_image(
         &self,
-        parameters: RandomImageParameters,
+        image_settings: ImageSettings,
     ) -> Result<Image, RequestError> {
-        let mut query_params = vec![("grayscale", parameters.grayscale.to_string())];
-        if parameters.blur > 0 {
-            query_params.push(("blur", min(10, parameters.blur).to_string()))
+        let mut query_params = vec![("grayscale", image_settings.grayscale.to_string())];
+        if image_settings.has_blur() {
+            query_params.push(("blur", image_settings.get_blur_value().to_string()))
         }
 
         let response = self
@@ -67,9 +36,9 @@ impl PicsumClient {
             .get(format!(
                 "{}/{}/{}.{}",
                 BASE_URL,
-                parameters.width,
-                parameters.height,
-                parameters.file_type.as_string()
+                image_settings.width,
+                image_settings.height,
+                image_settings.file_type.as_string()
             ))
             .query(&query_params)
             .send()
@@ -124,12 +93,7 @@ mod tests {
         let client = PicsumClient::default();
 
         let response = client
-            .get_random_image(
-                RandomImageParameters::builder()
-                    .width(400)
-                    .height(400)
-                    .build(),
-            )
+            .get_random_image(ImageSettings::builder().width(400).height(400).build())
             .await;
 
         assert!(
