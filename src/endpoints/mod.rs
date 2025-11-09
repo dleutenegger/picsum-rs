@@ -2,6 +2,7 @@ use std::cmp::min;
 use thiserror::Error;
 use typed_builder::TypedBuilder;
 
+pub mod details;
 pub mod image;
 pub mod random;
 
@@ -23,6 +24,9 @@ impl FileType {
 pub enum RequestError {
     #[error("Request error: {0}")]
     InvalidRequest(String),
+
+    #[error("Invalid response: {0}")]
+    InvalidResponse(String),
 
     #[error("Server error: {0}")]
     ServerError(String),
