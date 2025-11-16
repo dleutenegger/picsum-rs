@@ -9,17 +9,36 @@ impl PicsumClient {
     /// # Examples
     ///
     /// ```
-    /// use picsum_rs::endpoints::ImageSettings;
     /// use picsum_rs::PicsumClient;
+    /// use picsum_rs::endpoints::ImageSettings;
     ///
+    /// # tokio_test::block_on(async {
+    /// # let result =
     /// // Retrieve a random 400x400px image.
-    /// PicsumClient::default()
-    ///     .get_random_image(
-    ///         ImageSettings::builder()
-    ///             .width(400)
-    ///             .height(400)
-    ///             .build()
-    ///     );
+    /// match PicsumClient::default()
+    ///     .get_random_image(ImageSettings::builder().width(400).height(400).build())
+    ///     .await
+    /// {
+    ///     Ok(image_list) => {
+    /// #       Ok(
+    ///         image_list
+    /// #       )
+    ///     }
+    ///     Err(e) => {
+    ///         // Do your error handling
+    ///         # Err(e)
+    ///     }
+    /// }
+    /// # ;
+    /// # assert!(
+    /// #    result.is_ok(),
+    /// #    "Random image request failed: {}",
+    /// #    result.unwrap_err().to_string()
+    /// # );
+    /// # let image = result.unwrap();
+    /// # assert!(image.image.len() > 0);
+    /// # assert!(image.id.len() > 0)
+    /// # })
     /// ```
     pub async fn get_random_image(
         &self,
@@ -81,28 +100,5 @@ impl PicsumClient {
             },
             Err(err) => Err(UnexpectedError(err.to_string())),
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_retrieve() {
-        let client = PicsumClient::default();
-
-        let response = client
-            .get_random_image(ImageSettings::builder().width(400).height(400).build())
-            .await;
-
-        assert!(
-            response.is_ok(),
-            "Random image request failed: {}",
-            response.unwrap_err().to_string()
-        );
-        let image = response.unwrap();
-        assert!(image.image.len() > 0);
-        assert!(image.id.len() > 0)
     }
 }

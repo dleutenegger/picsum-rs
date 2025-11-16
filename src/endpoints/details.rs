@@ -22,15 +22,40 @@ impl PicsumClient {
     /// # Examples
     ///
     /// ```
-    /// use picsum_rs::endpoints::ImageSettings;
+    /// # use picsum_rs::endpoints::details::ImageDetails;
     /// use picsum_rs::PicsumClient;
     ///
+    /// # tokio_test::block_on(async {
     /// // Retrieve the image details for the image with the id `1`.
-    /// PicsumClient::default()
-    ///     .get_image_details(
-    ///         "1",
-    ///     );
-    ///
+    /// # let result =
+    /// match PicsumClient::default().get_image_details("1").await {
+    ///     Ok(image_details) => {
+    /// #       Ok(
+    ///         image_details
+    /// #       )
+    ///     }
+    ///     Err(e) => {
+    ///         // Do your error handling
+    ///         # Err(e)
+    ///     }
+    /// }
+    /// # ;
+    /// # assert!(
+    /// #     result.is_ok(),
+    /// #     "Retrieving the image details for the image with the id 1 failed: {}",
+    /// #     result.unwrap_err().to_string()
+    /// # );
+    /// # let details = result.unwrap();
+    /// # let expected_details = ImageDetails {
+    /// #     id: "1".to_string(),
+    /// #     author: "Alejandro Escamilla".to_string(),
+    /// #     width: 5000,
+    /// #     height: 3333,
+    /// #     url: "https://unsplash.com/photos/LNRyGwIJr5c".to_string(),
+    /// #     download_url: "https://picsum.photos/id/1/5000/3333".to_string(),
+    /// # };
+    /// # assert_eq!(expected_details, details);
+    /// # });
     /// ```
     pub async fn get_image_details(&self, id: &str) -> Result<ImageDetails, RequestError> {
         let response = self
@@ -62,13 +87,31 @@ impl PicsumClient {
     /// # Examples
     ///
     /// ```
-    /// use picsum_rs::endpoints::ImageSettings;
     /// use picsum_rs::PicsumClient;
     ///
+    /// # tokio_test::block_on(async {
     /// // Retrieve a list of images, fetching page 1 with a limit of 10 images per page.
-    /// PicsumClient::default()
-    ///     .get_images(1, 10);
-    ///
+    /// # let result =
+    /// match PicsumClient::default().get_images(1, 10).await {
+    ///     Ok(image_list) => {
+    /// #       Ok(
+    ///         image_list
+    /// #       )
+    ///     }
+    ///     Err(e) => {
+    ///         // Do your error handling
+    ///         # Err(e)
+    ///     }
+    /// }
+    /// # ;
+    /// # assert!(
+    /// #   result.is_ok(),
+    /// #   "Retrieving page one with a limit of 10 images per page failed: {}",
+    /// #   result.unwrap_err().to_string()
+    /// # );
+    /// # let page1 = result.unwrap();
+    /// # assert_eq!(10, page1.len());
+    /// # })
     /// ```
     pub async fn get_images(
         &self,
@@ -98,49 +141,5 @@ impl PicsumClient {
             },
             Err(err) => Err(UnexpectedError(err.to_string())),
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_retrieve_image_details() {
-        let client = PicsumClient::default();
-
-        let response = client.get_image_details("1").await;
-
-        assert!(
-            response.is_ok(),
-            "Retrieving the image details for the image with the id 1 failed: {}",
-            response.unwrap_err().to_string()
-        );
-        let details = response.unwrap();
-        let expected_details = ImageDetails {
-            id: "1".to_string(),
-            author: "Alejandro Escamilla".to_string(),
-            width: 5000,
-            height: 3333,
-            url: "https://unsplash.com/photos/LNRyGwIJr5c".to_string(),
-            download_url: "https://picsum.photos/id/1/5000/3333".to_string(),
-        };
-        assert_eq!(expected_details, details);
-    }
-
-    #[tokio::test]
-    async fn test_retrieve_images() {
-        let client = PicsumClient::default();
-
-        let response = client.get_images(1, 10).await;
-
-        assert!(
-            response.is_ok(),
-            "Retrieving page one with a limit of 10 images per page failed: {}",
-            response.unwrap_err().to_string()
-        );
-        let page1 = response.unwrap();
-
-        assert_eq!(10, page1.len());
     }
 }

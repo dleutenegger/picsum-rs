@@ -38,8 +38,8 @@ pub enum RequestError {
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Image {
-    id: String,
-    image: Vec<u8>,
+    pub id: String,
+    pub image: Vec<u8>,
 }
 
 #[derive(TypedBuilder)]

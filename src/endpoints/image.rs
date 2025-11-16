@@ -9,19 +9,41 @@ impl PicsumClient {
     /// # Examples
     ///
     /// ```
-    /// use picsum_rs::endpoints::ImageSettings;
     /// use picsum_rs::PicsumClient;
+    /// use picsum_rs::endpoints::ImageSettings;
     ///
+    /// # tokio_test::block_on(async {
+    /// # let result =
     /// // Retrieve the image with the id `1` in the size 400x400px.
-    /// PicsumClient::default()
-    ///     .get_image(
-    ///         "1",
-    ///         ImageSettings::builder()
-    ///             .width(400)
-    ///             .height(400)
-    ///             .build(),
-    ///     );
-    ///
+    /// match PicsumClient::default()
+    ///     .get_image("1", ImageSettings::builder().width(400).height(400).build())
+    ///     .await
+    /// {
+    ///     Ok(image_list) => {
+    /// #       Ok(
+    ///         image_list
+    /// #       )
+    ///     }
+    ///     Err(e) => {
+    ///         // Do your error handling
+    ///         # Err(e)
+    ///     }
+    /// }
+    /// # ;
+    /// # assert!(
+    /// #    result.is_ok(),
+    /// #    "Retrieving the image with the id 1 failed: {}",
+    /// #    result.unwrap_err().to_string()
+    /// # );
+    /// # let image = result.unwrap();
+    /// # assert_eq!(
+    /// #    "1".to_string(),
+    /// #    image.id,
+    /// #    "Expected image id to be `1`, actually: {}",
+    /// #    image.id
+    /// # );
+    /// # assert!(image.image.len() > 0);
+    /// # })
     /// ```
     pub async fn get_image(
         &self,
@@ -85,33 +107,5 @@ impl PicsumClient {
             },
             Err(err) => Err(UnexpectedError(err.to_string())),
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_retrieve_image_with_id() {
-        let client = PicsumClient::default();
-
-        let response = client
-            .get_image("1", ImageSettings::builder().width(400).height(400).build())
-            .await;
-
-        assert!(
-            response.is_ok(),
-            "Retrieving the image with the id 1 failed: {}",
-            response.unwrap_err().to_string()
-        );
-        let image = response.unwrap();
-        assert_eq!(
-            "1".to_string(),
-            image.id,
-            "Expected image id to be `1`, actually: {}",
-            image.id
-        );
-        assert!(image.image.len() > 0);
     }
 }
