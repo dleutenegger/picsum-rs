@@ -80,6 +80,18 @@ impl ImageSettings {
     }
 }
 
+impl Default for ImageSettings {
+    fn default() -> Self {
+        Self {
+            width: 400,
+            height: 400,
+            grayscale: false,
+            blur: 0,
+            file_type: FileType::Jpeg,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Default, Deserialize, Serialize)]
 pub struct ImageDetails {
     pub id: String,
