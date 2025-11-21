@@ -1,4 +1,4 @@
-pub mod endpoints;
+pub mod api;
 
 use std::sync::Arc;
 
