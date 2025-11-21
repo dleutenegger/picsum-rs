@@ -78,6 +78,22 @@ impl ImageSettings {
     pub fn has_blur(&self) -> bool {
         self.blur > 0
     }
+
+    pub fn is_grayscale(&self) -> bool {
+        self.grayscale
+    }
+
+    fn generate_query_params(&self) -> Vec<(&str, String)> {
+        [
+            self.is_grayscale()
+                .then_some(("grayscale", "true".to_string())),
+            self.has_blur()
+                .then_some(("blur", self.get_blur_value().to_string())),
+        ]
+        .iter()
+        .filter_map(|param| param.clone())
+        .collect()
+    }
 }
 
 impl Default for ImageSettings {
@@ -282,11 +298,6 @@ impl PicsumClient {
         id: &str,
         image_settings: &ImageSettings,
     ) -> Result<Image, RequestError> {
-        let mut query_params = vec![("grayscale", image_settings.grayscale.to_string())];
-        if image_settings.has_blur() {
-            query_params.push(("blur", image_settings.get_blur_value().to_string()))
-        }
-
         let response = self
             .inner
             .client
@@ -298,7 +309,7 @@ impl PicsumClient {
                 image_settings.height,
                 image_settings.file_type.as_string()
             ))
-            .query(&query_params)
+            .query(&image_settings.generate_query_params())
             .send()
             .await;
 
@@ -385,11 +396,6 @@ impl PicsumClient {
         &self,
         image_settings: &ImageSettings,
     ) -> Result<Image, RequestError> {
-        let mut query_params = vec![("grayscale", image_settings.grayscale.to_string())];
-        if image_settings.has_blur() {
-            query_params.push(("blur", image_settings.get_blur_value().to_string()))
-        }
-
         let response = self
             .inner
             .client
@@ -400,7 +406,7 @@ impl PicsumClient {
                 image_settings.height,
                 image_settings.file_type.as_string()
             ))
-            .query(&query_params)
+            .query(&image_settings.generate_query_params())
             .send()
             .await;
 
