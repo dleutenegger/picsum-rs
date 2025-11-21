@@ -4,9 +4,9 @@ use crate::endpoints::RequestError::{
 };
 use crate::{BASE_URL, PicsumClient};
 use reqwest::StatusCode;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Deserialize, Eq, PartialEq)]
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Default, Deserialize, Serialize)]
 pub struct ImageDetails {
     pub id: String,
     pub author: String,
@@ -27,25 +27,8 @@ impl PicsumClient {
     ///
     /// # tokio_test::block_on(async {
     /// // Retrieve the image details for the image with the id `1`.
-    /// # let result =
-    /// match PicsumClient::default().get_image_details("1").await {
-    ///     Ok(image_details) => {
-    /// #       Ok(
-    ///         image_details
-    /// #       )
-    ///     }
-    ///     Err(e) => {
-    ///         // Do your error handling
-    ///         # Err(e)
-    ///     }
-    /// }
-    /// # ;
-    /// # assert!(
-    /// #     result.is_ok(),
-    /// #     "Retrieving the image details for the image with the id 1 failed: {}",
-    /// #     result.unwrap_err().to_string()
-    /// # );
-    /// # let details = result.unwrap();
+    /// # let details =
+    /// PicsumClient::default().get_image_details("1").await?;
     /// # let expected_details = ImageDetails {
     /// #     id: "1".to_string(),
     /// #     author: "Alejandro Escamilla".to_string(),

@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use std::cmp::min;
 use thiserror::Error;
 use typed_builder::TypedBuilder;
@@ -36,7 +37,7 @@ pub enum RequestError {
 }
 
 #[allow(dead_code)]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Default, Serialize, Deserialize)]
 pub struct Image {
     pub id: String,
     pub image: Vec<u8>,
