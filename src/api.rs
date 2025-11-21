@@ -236,7 +236,7 @@ impl PicsumClient {
     /// # let result =
     /// // Retrieve the image with the id `1` in the size 400x400px.
     /// match PicsumClient::default()
-    ///     .get_image("1", ImageSettings::builder().width(400).height(400).build())
+    ///     .get_image("1", &ImageSettings::builder().width(400).height(400).build())
     ///     .await
     /// {
     ///     Ok(image_list) => {
@@ -268,7 +268,7 @@ impl PicsumClient {
     pub async fn get_image(
         &self,
         id: &str,
-        image_settings: ImageSettings,
+        image_settings: &ImageSettings,
     ) -> Result<Image, RequestError> {
         let mut query_params = vec![("grayscale", image_settings.grayscale.to_string())];
         if image_settings.has_blur() {
@@ -345,7 +345,7 @@ impl PicsumClient {
     /// # let result =
     /// // Retrieve a random 400x400px image.
     /// match PicsumClient::default()
-    ///     .get_random_image(ImageSettings::builder().width(400).height(400).build())
+    ///     .get_random_image(&ImageSettings::builder().width(400).height(400).build())
     ///     .await
     /// {
     ///     Ok(image_list) => {
@@ -371,7 +371,7 @@ impl PicsumClient {
     /// ```
     pub async fn get_random_image(
         &self,
-        image_settings: ImageSettings,
+        image_settings: &ImageSettings,
     ) -> Result<Image, RequestError> {
         let mut query_params = vec![("grayscale", image_settings.grayscale.to_string())];
         if image_settings.has_blur() {
