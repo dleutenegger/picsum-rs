@@ -1,4 +1,4 @@
-use crate::{BASE_URL, PicsumClient};
+use crate::PicsumClient;
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use std::cmp::min;
@@ -134,7 +134,7 @@ impl PicsumClient {
         let response = self
             .inner
             .client
-            .get(format!("{}/id/{}/info", BASE_URL, id))
+            .get(format!("{}/id/{}/info", self.inner.base_url, id))
             .send()
             .await;
 
@@ -198,7 +198,7 @@ impl PicsumClient {
         let response = self
             .inner
             .client
-            .get(format!("{}/v2/list", BASE_URL))
+            .get(format!("{}/v2/list", self.inner.base_url))
             .query(&vec![("page", page), ("limit", limit as u16)])
             .send()
             .await;
@@ -280,7 +280,7 @@ impl PicsumClient {
             .client
             .get(format!(
                 "{}/id/{}/{}/{}.{}",
-                BASE_URL,
+                self.inner.base_url,
                 id,
                 image_settings.width,
                 image_settings.height,
@@ -383,7 +383,7 @@ impl PicsumClient {
             .client
             .get(format!(
                 "{}/{}/{}.{}",
-                BASE_URL,
+                self.inner.base_url,
                 image_settings.width,
                 image_settings.height,
                 image_settings.file_type.as_string()
