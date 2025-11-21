@@ -38,7 +38,7 @@ pub enum RequestError {
 #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Default, Serialize, Deserialize)]
 pub struct Image {
     pub id: String,
-    pub image: Vec<u8>,
+    pub data: Vec<u8>,
 }
 
 #[derive(TypedBuilder)]
@@ -274,7 +274,7 @@ impl PicsumClient {
     /// #    "Expected image id to be `1`, actually: {}",
     /// #    image.id
     /// # );
-    /// # assert!(image.image.len() > 0);
+    /// # assert!(image.data.len() > 0);
     /// # })
     /// ```
     pub async fn get_image(
@@ -319,7 +319,7 @@ impl PicsumClient {
 
                     Ok(Image {
                         id: id.into(),
-                        image: match res.bytes().await {
+                        data: match res.bytes().await {
                             Ok(bytes) => bytes.to_vec(),
                             Err(err) => {
                                 return Err(RequestError::UnexpectedError(format!(
@@ -377,7 +377,7 @@ impl PicsumClient {
     /// #    result.unwrap_err().to_string()
     /// # );
     /// # let image = result.unwrap();
-    /// # assert!(image.image.len() > 0);
+    /// # assert!(image.data.len() > 0);
     /// # assert!(image.id.len() > 0)
     /// # })
     /// ```
@@ -421,7 +421,7 @@ impl PicsumClient {
 
                     Ok(Image {
                         id: id.into(),
-                        image: match res.bytes().await {
+                        data: match res.bytes().await {
                             Ok(bytes) => bytes.to_vec(),
                             Err(err) => {
                                 return Err(RequestError::UnexpectedError(format!(
