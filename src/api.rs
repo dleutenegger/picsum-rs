@@ -5,6 +5,7 @@ use std::cmp::min;
 use thiserror::Error;
 use typed_builder::TypedBuilder;
 
+#[derive(Debug, Ord, PartialOrd, Eq, PartialEq, Hash, Copy, Clone, Serialize, Deserialize)]
 pub enum FileType {
     Jpeg,
     Webp,
