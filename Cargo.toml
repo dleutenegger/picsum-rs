@@ -6,6 +6,7 @@ authors = ["dleutenegger"]
 keywords = ["api", "picsum"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/dleutenegger/picsum-rs"
 
 [dependencies]
 reqwest = { version = "0.12.24", features = ["json"] }
