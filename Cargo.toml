@@ -16,4 +16,4 @@ typed-builder = "0.23.2"
 serde = { version = "1.0.228", features = ["derive"] }
 
 [dev-dependencies]
-tokio-test = "0.4.4"
+tokio-test = "0.4.5"
